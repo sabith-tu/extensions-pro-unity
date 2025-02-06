@@ -2,14 +2,14 @@ using UnityEngine;
 
 namespace SABI
 {
-
     public static class Vector4Extensions
     {
+        public static Vector4 SetValue(this Vector4 v, float value) => new Vector4(value, value, value, value);
+
         public static Vector4 WithX(this Vector4 v, float x) => new Vector4(x, v.y, v.z, v.w);
 
         public static Vector4 WithX(this Vector4 v, Vector4 target) =>
-                 new Vector4(target.x, v.y, v.z, v.w);
-
+            new Vector4(target.x, v.y, v.z, v.w);
 
         public static Vector4 SetX(this ref Vector4 v, float x)
         {
@@ -23,13 +23,10 @@ namespace SABI
             return v;
         }
 
-
         public static Vector4 WithY(this Vector4 v, float y) => new Vector4(v.x, y, v.z, v.w);
-
 
         public static Vector4 WithY(this Vector4 v, Vector4 target) =>
             new Vector4(v.x, target.y, v.z, v.w);
-
 
         public static Vector4 SetY(this ref Vector4 v, float y)
         {
@@ -48,7 +45,6 @@ namespace SABI
         public static Vector4 WithZ(this Vector4 v, Vector4 target) =>
             new Vector4(v.x, v.y, target.z, v.w);
 
-
         public static Vector4 SetZ(this ref Vector4 v, float z)
         {
             v = new Vector4(v.x, v.y, z, v.w);
@@ -65,7 +61,6 @@ namespace SABI
 
         public static Vector4 WithW(this Vector4 v, Vector4 target) =>
             new Vector4(v.x, v.y, v.z, target.w);
-
 
         public static Vector4 SetW(this ref Vector4 v, float w)
         {

@@ -38,5 +38,14 @@ namespace SABI
             }
             return key;
         }
+
+        public static bool ContainsAndNotNull<TKey, TValue>(
+            this Dictionary<TKey, TValue> dictionary,
+            TKey key
+        )
+            where TValue : UnityEngine.Object
+        {
+            return dictionary.ContainsKey(key) && dictionary[key] != null;
+        }
     }
 }

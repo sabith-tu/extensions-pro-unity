@@ -4,6 +4,8 @@ namespace SABI
 {
     public static class Vector2Extensions
     {
+        public static Vector2 SetValue(this Vector2 v, float value) => new Vector2(value, value);
+
         public static Vector2 WithX(this Vector2 vector, float x)
         {
             return new Vector2(x, vector.y);

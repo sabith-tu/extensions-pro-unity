@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -16,6 +15,24 @@ namespace SABI
                 return false;
             return !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance;
         }
+
+        public static bool HasReachedDestination(
+            this NavMeshAgent agent,
+            Transform destination,
+            float tolerence = 0.1f
+        ) => agent.transform.Distance(destination) < tolerence;
+
+        public static bool HasReachedDestination(
+            this NavMeshAgent agent,
+            Vector3 destination,
+            float tolerence = 0.1f
+        ) => agent.transform.Distance(destination) < tolerence;
+
+        // public static NavMeshAgent HasReachedDestination(this NavMeshAgent agent, Transform target)
+        // {
+        //     agent.SetDestination(target.position);
+        //     return agent;
+        // }
 
         public static bool SetRandomDestination(
             this NavMeshAgent agent,
@@ -66,11 +83,6 @@ namespace SABI
             return agent;
         }
 
-        // Commented becuase better one is available under
-
-        /// <summary>
-        /// Call it from a loop
-        /// </summary>
         public static NavMeshAgent PatrolDestination(
             this NavMeshAgent agent,
             List<Vector3> patrolPath,
@@ -128,37 +140,6 @@ namespace SABI
             return agent;
         }
 
-        public static NavMeshAgent FollowInRange(
-            this NavMeshAgent agent,
-            Transform target,
-            float minDistance,
-            float maxDistance
-        )
-        {
-            Vector3 selfPosition = agent.transform.position;
-            Vector3 targetPosition = target.position;
-            float distance = selfPosition.Distance(targetPosition);
-
-            if (distance < minDistance)
-            {
-                Vector3 directionToMoveWhenTooCloseToPlayer = (
-                    target.position - selfPosition
-                ).normalized;
-                Vector3 positionToMove =
-                    selfPosition
-                    + (directionToMoveWhenTooCloseToPlayer * -1 * (maxDistance - distance));
-                NavMeshPath path = new NavMeshPath();
-                if (agent.CalculatePath(positionToMove, path))
-                    agent.SetDestination(positionToMove.WithY(selfPosition.y));
-            }
-            else
-            {
-                agent.SetDestination(target.position);
-            }
-
-            return agent;
-        }
-
         public static NavMeshAgent SetTemporarySpeed(
             this NavMeshAgent agent,
             MonoBehaviour monoBehaviour,
@@ -190,43 +171,55 @@ namespace SABI
             return agent;
         }
 
-        public static NavMeshAgent ContinuesWanderWhile(
+        public static NavMeshAgent Wander(
             this NavMeshAgent agent,
-            Func<bool> condition,
-            float radius,
+            Func<float> radius,
             MonoBehaviour monoBehaviour,
-            float waitTimeBeforeSwitchingDestination = 1,
+            bool isContinues = true,
+            Func<float> waitTime = null,
+            Func<bool> condition = null,
             Action OnStartMoving = null,
             Action OnStopMoving = null
         )
         {
             if (agent == null || !agent.isActiveAndEnabled)
                 return null;
-            monoBehaviour.StartCoroutine(WanderCoroutine());
+
+            if (isContinues)
+                monoBehaviour.StartCoroutine(WanderCoroutine());
+            else
+                agent.SetRandomDestination(radius());
 
             IEnumerator WanderCoroutine()
             {
-                while (agent != null && agent.isActiveAndEnabled && condition())
+                while (
+                    agent != null && agent.isActiveAndEnabled && (condition?.Invoke() ?? true)
+                )
                 {
-                    if (agent.SetRandomDestination(radius))
+                    if (agent.SetRandomDestination(radius()))
                     {
                         OnStartMoving?.Invoke();
                         yield return new WaitUntil(() => agent.HasReachedDestination());
+                        OnStopMoving?.Invoke();
                     }
-                    OnStopMoving?.Invoke();
-                    yield return new WaitForSeconds(waitTimeBeforeSwitchingDestination);
+                    yield return new WaitForSeconds(waitTime?.Invoke() ?? 1);
                 }
             }
 
             return agent;
         }
 
+        #region Chase
+
         public static NavMeshAgent ContinuesChaseTargetWhile(
             this NavMeshAgent agent,
-            Func<bool> condition,
-            Transform target,
-            float chaseRange,
-            MonoBehaviour monoBehaviour
+            Func<Transform> target,
+            MonoBehaviour monoBehaviour,
+            Func<float> minDistanceKeep,
+            Func<float> maxDistanceKeep,
+            Func<float> delayBetweenSettingDestination = null,
+            bool loopCondition = true,
+            Func<float> distanceToPlayer = null
         )
         {
             if (agent == null || !agent.isActiveAndEnabled || target == null)
@@ -235,29 +228,69 @@ namespace SABI
 
             IEnumerator ChaseTargetCoroutine()
             {
-                while (agent != null && agent.isActiveAndEnabled && target != null && condition())
+                Vector3 selfPosition = agent.transform.position;
+
+                while (
+                    agent != null
+                    && agent.isActiveAndEnabled
+                    && target != null
+                    && loopCondition
+                )
                 {
-                    if (Vector3.Distance(agent.transform.position, target.position) <= chaseRange)
+
+                    WaitForSeconds delay = new WaitForSeconds(delayBetweenSettingDestination?.Invoke() ?? 0);
+                    float distance =
+                        distanceToPlayer == null
+                            ? agent.transform.Distance(target())
+                            : distanceToPlayer();
+
+                    if (minDistanceKeep == null || maxDistanceKeep == null)
                     {
-                        agent.SetDestination(target.position);
+                        agent.SetDestination(target().position);
                     }
                     else
                     {
-                        agent.ResetPath(); // Stop chasing if the target is out of range
+                        if (distance < minDistanceKeep())
+                        {
+                            Vector3 directionToMoveWhenTooCloseToPlayer = (
+                                target().position - selfPosition
+                            ).normalized;
+                            Vector3 positionToMove =
+                                selfPosition
+                                + (
+                                    directionToMoveWhenTooCloseToPlayer
+                                    * -1
+                                    * (maxDistanceKeep() - distance)
+                                );
+                            NavMeshPath path = new NavMeshPath();
+                            if (agent.CalculatePath(positionToMove, path))
+                                agent.SetDestination(positionToMove);
+                        }
+                        else
+                        {
+                            agent.SetDestination(target().position);
+                        }
                     }
-                    yield return null;
+
+                    if (delayBetweenSettingDestination == null)
+                        yield return null;
+                    else
+                        yield return delay;
                 }
             }
 
             return agent;
         }
 
+        #endregion
+
+
         public static NavMeshAgent ContinuesFleeFromTargetWhile(
             this NavMeshAgent agent,
-            Func<bool> condition,
-            Transform target,
-            float fleeDistance,
-            MonoBehaviour monoBehaviour
+            MonoBehaviour monoBehaviour,
+            Func<Transform> target,
+            Func<float> fleeDistance = null,
+            Func<bool> condition = null
         )
         {
             if (agent == null || !agent.isActiveAndEnabled || target == null)
@@ -266,16 +299,20 @@ namespace SABI
 
             IEnumerator FleeFromTargetCoroutine()
             {
-                while (agent != null && agent.isActiveAndEnabled && target != null && condition())
+                while (
+                    agent != null && agent.isActiveAndEnabled && target != null && (condition?.Invoke() ?? true)
+                )
                 {
-                    Vector3 fleeDirection = (agent.transform.position - target.position).normalized;
-                    Vector3 fleePosition = agent.transform.position + fleeDirection * fleeDistance;
+                    float fleeDistanceValue = fleeDistance?.Invoke() ?? 10;
+                    Vector3 fleeDirection = (agent.transform.position - target().position).normalized;
+                    Vector3 fleePosition =
+                        agent.transform.position + fleeDirection * fleeDistanceValue;
 
                     if (
                         NavMesh.SamplePosition(
                             fleePosition,
                             out NavMeshHit hit,
-                            fleeDistance,
+                            fleeDistanceValue,
                             NavMesh.AllAreas
                         )
                     )
@@ -291,36 +328,38 @@ namespace SABI
 
         public static NavMeshAgent ContinuesPatrolWaypointsWhile(
             this NavMeshAgent agent,
-            Func<bool> condition,
-            List<Transform> waypoints,
-            float tolerance,
+            Func<List<Transform>> waypoints,
+            //float tolerance,
             MonoBehaviour monoBehaviour,
-            bool followWaypointOrder = true
+            Func<bool> followWaypointOrder = null,
+            Func<bool> condition = null
         )
         {
-            if (
-                agent == null
-                || !agent.isActiveAndEnabled
-                || waypoints == null
-                || waypoints.Count == 0
-            )
-                return null;
+            // if (
+            //     agent == null
+            //     || !agent.isActiveAndEnabled
+            //     || waypoints == null
+            //     || waypoints.Count == 0
+            // )
+            // return null;
             monoBehaviour.StartCoroutine(PatrolWaypointsCoroutine());
 
             IEnumerator PatrolWaypointsCoroutine()
             {
                 int currentWaypointIndex = 0;
 
-                while (agent != null && agent.isActiveAndEnabled && condition())
+                while (
+                    agent != null && agent.isActiveAndEnabled && (condition?.Invoke() ?? true)
+                )
                 {
-                    Transform currentWaypoint = waypoints[currentWaypointIndex];
+                    Transform currentWaypoint = waypoints()[currentWaypointIndex];
                     agent.SetDestination(currentWaypoint.position);
 
                     yield return new WaitUntil(() => agent.HasReachedDestination());
 
-                    currentWaypointIndex = followWaypointOrder
-                        ? (currentWaypointIndex + 1) % waypoints.Count
-                        : Random.Range(0, waypoints.Count);
+                    currentWaypointIndex = (followWaypointOrder?.Invoke() ?? true)
+                        ? (currentWaypointIndex + 1) % waypoints().Count
+                        : Random.Range(0, waypoints().Count);
                 }
             }
 
@@ -329,10 +368,10 @@ namespace SABI
 
         public static NavMeshAgent ContinuesAvoidObstaclesWhile(
             this NavMeshAgent agent,
-            Func<bool> condition,
             LayerMask obstacleMask,
             float avoidanceRadius,
-            MonoBehaviour monoBehaviour
+            MonoBehaviour monoBehaviour,
+            Func<bool> condition = null
         )
         {
             if (agent == null || !agent.isActiveAndEnabled)
@@ -341,7 +380,9 @@ namespace SABI
 
             IEnumerator AvoidObstaclesCoroutine()
             {
-                while (agent != null && agent.isActiveAndEnabled && condition())
+                while (
+                    agent != null && agent.isActiveAndEnabled && (condition?.Invoke() ?? true)
+                )
                 {
                     Collider[] obstacles = Physics.OverlapSphere(
                         agent.transform.position,

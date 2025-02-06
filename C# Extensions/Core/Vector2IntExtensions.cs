@@ -4,6 +4,8 @@ namespace SABI
 {
     public static class Vector2IntExtensions
     {
+        public static Vector2Int SetValue(this Vector2Int v, int value) => new Vector2Int(value, value);
+
         public static Vector2Int WithX(this Vector2Int vector, int x)
         {
             return new Vector2Int(x, vector.y);

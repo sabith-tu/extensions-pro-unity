@@ -5,6 +5,8 @@ namespace SABI
 {
     public static class Vector3Extensions
     {
+        public static Vector3 SetValue(this Vector3 v, float value) => new Vector3(value, value, value);
+
         #region With X
 
         public static Vector3 WithX(this Vector3 v, float x) => new Vector3(x, v.y, v.z);
@@ -79,7 +81,7 @@ namespace SABI
 
         #endregion
 
-        #region Set X
+        #region Set Y
 
         public static Vector3 SetY(this ref Vector3 v, float y)
         {
@@ -132,7 +134,8 @@ namespace SABI
 
         #endregion
 
-        #region Set X
+
+        #region Set Z
 
         public static Vector3 SetZ(this ref Vector3 v, float z)
         {
@@ -161,6 +164,38 @@ namespace SABI
         public static Vector3 SetMultiplyZ(this ref Vector3 v, float z)
         {
             v = new Vector3(v.x, v.y, v.z * z);
+            return v;
+        }
+
+        #endregion
+
+        #region With XY, XZ, YZ
+
+        public static Vector3 WithXY(this Vector3 v, float x, float y) => new Vector3(x, y, v.z);
+
+        public static Vector3 WithXZ(this Vector3 v, float x, float z) => new Vector3(x, v.y, z);
+
+        public static Vector3 WithYZ(this Vector3 v, float y, float z) => new Vector3(v.x, y, z);
+
+        #endregion
+
+        #region Set XY, XZ, YZ
+
+        public static Vector3 SetXY(this ref Vector3 v, float x, float y)
+        {
+            v = new Vector3(x, y, v.z);
+            return v;
+        }
+
+        public static Vector3 SetXZ(this ref Vector3 v, float x, float z)
+        {
+            v = new Vector3(x, v.y, z);
+            return v;
+        }
+
+        public static Vector3 SetYZ(this ref Vector3 v, float y, float z)
+        {
+            v = new Vector3(v.x, y, z);
             return v;
         }
 
@@ -274,6 +309,13 @@ namespace SABI
         }
 
         public static float Distance(this Vector3 v, Vector3 target) => Vector3.Distance(v, target);
+        public static float Distance(this Vector3 v, Transform target) => Vector3.Distance(v, target.position);
+
+        public static float DistanceWithoutHeight(this Vector3 v, Vector3 target) =>
+            Vector3.Distance(v.WithY(0), target.WithY(0));
+
+        public static float DistanceOfHeight(this Vector3 v, Vector3 target) =>
+            Vector3.Distance(v.WithX(0), target.WithY(0));
         #endregion
 
         public static Vector3 Remap(
