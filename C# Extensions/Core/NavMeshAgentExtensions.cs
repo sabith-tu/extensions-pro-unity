@@ -9,6 +9,15 @@ namespace SABI
 {
     public static class NavMeshAgentExtensions
     {
+        public static NavMeshAgent IncreaseAngularSpeed(
+            this NavMeshAgent agent,
+            float angularSpeed = 1000
+        )
+        {
+            agent.angularSpeed = angularSpeed;
+            return agent;
+        }
+
         public static bool HasReachedDestination(this NavMeshAgent agent)
         {
             if (agent == null)
@@ -27,12 +36,6 @@ namespace SABI
             Vector3 destination,
             float tolerence = 0.1f
         ) => agent.transform.Distance(destination) < tolerence;
-
-        // public static NavMeshAgent HasReachedDestination(this NavMeshAgent agent, Transform target)
-        // {
-        //     agent.SetDestination(target.position);
-        //     return agent;
-        // }
 
         public static bool SetRandomDestination(
             this NavMeshAgent agent,
@@ -173,13 +176,14 @@ namespace SABI
 
         public static NavMeshAgent Wander(
             this NavMeshAgent agent,
-            Func<float> radius,
             MonoBehaviour monoBehaviour,
+            Func<float> radius,
             bool isContinues = true,
             Func<float> waitTime = null,
-            Func<bool> condition = null,
+            Func<bool> loopWhile = null,
             Action OnStartMoving = null,
-            Action OnStopMoving = null
+            Action OnStopMoving = null,
+            Action OnUpdate = null
         )
         {
             if (agent == null || !agent.isActiveAndEnabled)
@@ -192,9 +196,7 @@ namespace SABI
 
             IEnumerator WanderCoroutine()
             {
-                while (
-                    agent != null && agent.isActiveAndEnabled && (condition?.Invoke() ?? true)
-                )
+                while (agent != null && agent.isActiveAndEnabled && (loopWhile?.Invoke() ?? true))
                 {
                     if (agent.SetRandomDestination(radius()))
                     {
@@ -203,6 +205,7 @@ namespace SABI
                         OnStopMoving?.Invoke();
                     }
                     yield return new WaitForSeconds(waitTime?.Invoke() ?? 1);
+                    OnUpdate?.Invoke();
                 }
             }
 
@@ -211,15 +214,16 @@ namespace SABI
 
         #region Chase
 
-        public static NavMeshAgent ContinuesChaseTargetWhile(
+        public static NavMeshAgent Chase(
             this NavMeshAgent agent,
-            Func<Transform> target,
             MonoBehaviour monoBehaviour,
+            Func<Transform> target,
             Func<float> minDistanceKeep,
             Func<float> maxDistanceKeep,
             Func<float> delayBetweenSettingDestination = null,
-            bool loopCondition = true,
-            Func<float> distanceToPlayer = null
+            Func<bool> loopWhile = null,
+            Func<float> distanceToPlayer = null,
+            Action OnUpdate = null
         )
         {
             if (agent == null || !agent.isActiveAndEnabled || target == null)
@@ -234,11 +238,14 @@ namespace SABI
                     agent != null
                     && agent.isActiveAndEnabled
                     && target != null
-                    && loopCondition
+                    && (loopWhile?.Invoke() ?? true)
                 )
                 {
-
-                    WaitForSeconds delay = new WaitForSeconds(delayBetweenSettingDestination?.Invoke() ?? 0);
+                    WaitForSeconds delay = new WaitForSeconds(
+                        delayBetweenSettingDestination == null
+                            ? 0
+                            : delayBetweenSettingDestination()
+                    );
                     float distance =
                         distanceToPlayer == null
                             ? agent.transform.Distance(target())
@@ -276,6 +283,8 @@ namespace SABI
                         yield return null;
                     else
                         yield return delay;
+
+                    OnUpdate?.Invoke();
                 }
             }
 
@@ -285,12 +294,13 @@ namespace SABI
         #endregion
 
 
-        public static NavMeshAgent ContinuesFleeFromTargetWhile(
+        public static NavMeshAgent Flee(
             this NavMeshAgent agent,
             MonoBehaviour monoBehaviour,
-            Func<Transform> target,
+            Func<Transform> target = null,
             Func<float> fleeDistance = null,
-            Func<bool> condition = null
+            Func<bool> loopWhile = null,
+            Action OnUpdate = null
         )
         {
             if (agent == null || !agent.isActiveAndEnabled || target == null)
@@ -300,11 +310,16 @@ namespace SABI
             IEnumerator FleeFromTargetCoroutine()
             {
                 while (
-                    agent != null && agent.isActiveAndEnabled && target != null && (condition?.Invoke() ?? true)
+                    agent != null
+                    && agent.isActiveAndEnabled
+                    && target != null
+                    && (loopWhile?.Invoke() ?? true)
                 )
                 {
-                    float fleeDistanceValue = fleeDistance?.Invoke() ?? 10;
-                    Vector3 fleeDirection = (agent.transform.position - target().position).normalized;
+                    float fleeDistanceValue = fleeDistance == null ? 10 : fleeDistance();
+                    Vector3 fleeDirection = (
+                        agent.transform.position - target().position
+                    ).normalized;
                     Vector3 fleePosition =
                         agent.transform.position + fleeDirection * fleeDistanceValue;
 
@@ -320,46 +335,47 @@ namespace SABI
                         agent.SetDestination(hit.position);
                     }
                     yield return null;
+                    OnUpdate?.Invoke();
                 }
             }
 
             return agent;
         }
 
-        public static NavMeshAgent ContinuesPatrolWaypointsWhile(
+        public static NavMeshAgent Patroll(
             this NavMeshAgent agent,
-            Func<List<Transform>> waypoints,
-            //float tolerance,
             MonoBehaviour monoBehaviour,
+            Func<List<Transform>> waypoints,
+            float tolerance = 0.1f,
+            Func<float> waitTime = null,
             Func<bool> followWaypointOrder = null,
-            Func<bool> condition = null
+            Func<bool> loopWhile = null,
+            Action OnStartMoving = null,
+            Action OnStopMoving = null,
+            Action OnUpdate = null
         )
         {
-            // if (
-            //     agent == null
-            //     || !agent.isActiveAndEnabled
-            //     || waypoints == null
-            //     || waypoints.Count == 0
-            // )
-            // return null;
             monoBehaviour.StartCoroutine(PatrolWaypointsCoroutine());
 
             IEnumerator PatrolWaypointsCoroutine()
             {
                 int currentWaypointIndex = 0;
 
-                while (
-                    agent != null && agent.isActiveAndEnabled && (condition?.Invoke() ?? true)
-                )
+                while (agent != null && agent.isActiveAndEnabled && (loopWhile?.Invoke() ?? true))
                 {
                     Transform currentWaypoint = waypoints()[currentWaypointIndex];
                     agent.SetDestination(currentWaypoint.position);
-
-                    yield return new WaitUntil(() => agent.HasReachedDestination());
-
-                    currentWaypointIndex = (followWaypointOrder?.Invoke() ?? true)
-                        ? (currentWaypointIndex + 1) % waypoints().Count
-                        : Random.Range(0, waypoints().Count);
+                    OnStartMoving?.Invoke();
+                    yield return new WaitUntil(
+                        () => agent.HasReachedDestination(currentWaypoint.position, tolerance)
+                    );
+                    OnStopMoving?.Invoke();
+                    yield return new WaitForSeconds(waitTime?.Invoke() ?? 1);
+                    currentWaypointIndex =
+                        (followWaypointOrder != null ? followWaypointOrder() : true)
+                            ? (currentWaypointIndex + 1) % waypoints().Count
+                            : Random.Range(0, waypoints().Count);
+                    OnUpdate?.Invoke();
                 }
             }
 
@@ -380,9 +396,7 @@ namespace SABI
 
             IEnumerator AvoidObstaclesCoroutine()
             {
-                while (
-                    agent != null && agent.isActiveAndEnabled && (condition?.Invoke() ?? true)
-                )
+                while (agent != null && agent.isActiveAndEnabled && (condition?.Invoke() ?? true))
                 {
                     Collider[] obstacles = Physics.OverlapSphere(
                         agent.transform.position,

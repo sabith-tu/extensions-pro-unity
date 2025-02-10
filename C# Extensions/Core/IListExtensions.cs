@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace SABI
@@ -11,10 +8,7 @@ namespace SABI
         /// <summary>
         /// Checks if the list is null or contains no elements
         /// </summary>
-        public static bool IsNullOrEmpty<T>(this IList<T> list)
-        {
-            return list == null || list.Count == 0;
-        }
+        public static bool IsNullOrEmpty<T>(this IList<T> list) => list == null || list.Count == 0;
 
         /// <summary>
         /// Returns a random item from the list

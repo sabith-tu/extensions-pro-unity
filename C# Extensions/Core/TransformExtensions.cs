@@ -926,20 +926,14 @@ namespace SABI
             return transform;
         }
 
-        public static Transform SetScale(this Transform transform, float UniformScaleValue)
-        {
-            return transform.SetScale(UniformScaleValue, UniformScaleValue, UniformScaleValue);
-        }
+        public static Transform SetScale(this Transform transform, float UniformScaleValue) =>
+            transform.SetScale(UniformScaleValue, UniformScaleValue, UniformScaleValue);
 
-        public static Transform AddScale(this Transform transform, float UniformScaleValue)
-        {
-            return transform.AddScale(UniformScaleValue, UniformScaleValue, UniformScaleValue);
-        }
+        public static Transform AddScale(this Transform transform, float UniformScaleValue) =>
+            transform.AddScale(UniformScaleValue, UniformScaleValue, UniformScaleValue);
 
-        public static Transform SubtractScale(this Transform transform, float UniformScaleValue)
-        {
-            return transform.SubtractScale(UniformScaleValue, UniformScaleValue, UniformScaleValue);
-        }
+        public static Transform SubtractScale(this Transform transform, float UniformScaleValue) =>
+            transform.SubtractScale(UniformScaleValue, UniformScaleValue, UniformScaleValue);
 
         public static Transform SetScaleX(this Transform transform, float x)
         {
@@ -1002,18 +996,16 @@ namespace SABI
         public static Transform DestroyChildren(this Transform transform)
         {
             foreach (Transform child in transform)
-            {
                 UnityEngine.Object.Destroy(child.gameObject);
-            }
+
             return transform;
         }
 
         public static Transform DetachChildren(this Transform transform)
         {
             foreach (Transform child in transform)
-            {
                 child.SetParent(null);
-            }
+
             return transform;
         }
 
@@ -1045,13 +1037,29 @@ namespace SABI
             (source.position - target.position).normalized;
 
         public static Vector3 DirectionToIgnoringHeight(this Transform source, Transform target) =>
-        (target.position.WithY(0) - source.position.WithY(0)).normalized;
+            (target.position.WithY(0) - source.position.WithY(0)).normalized;
 
-        public static Vector3 DirectionFromIgnoringHeight(this Transform target, Transform source) =>
-            (source.position.WithY(0) - target.position.WithY(0)).normalized;
+        public static Vector3 DirectionFromIgnoringHeight(
+            this Transform target,
+            Transform source
+        ) => (source.position.WithY(0) - target.position.WithY(0)).normalized;
+
+        public static Vector3 DirectionTo(this Transform source, Vector3 target) =>
+            (target - source.position).normalized;
+
+        public static Vector3 DirectionFrom(this Transform target, Vector3 source) =>
+            (source - target.position).normalized;
+
+        public static Vector3 DirectionToIgnoringHeight(this Transform source, Vector3 target) =>
+            (target.WithY(0) - source.position.WithY(0)).normalized;
+
+        public static Vector3 DirectionFromIgnoringHeight(this Transform target, Vector3 source) =>
+            (source.WithY(0) - target.position.WithY(0)).normalized;
 
         public static Vector3 back(this Transform v) => -v.forward;
+
         public static Vector3 left(this Transform v) => -v.right;
+
         public static Vector3 down(this Transform v) => -v.up;
 
         #endregion
@@ -1315,6 +1323,34 @@ namespace SABI
 
         public static Vector3 Cross(this Transform v, Vector3 target) =>
             Vector3.Cross(v.forward, (target.WithY(0) - v.position.WithY(0)).normalized);
+
+        #endregion
+
+        #region Position in world space and local space
+
+        public static Vector3 WorldSpacePositionToLocalSpace(
+            this Transform transform,
+            Vector3 position
+        )
+        {
+            Matrix4x4 worldToLocal = Matrix4x4
+                .TRS(transform.position, transform.rotation, Vector3.one)
+                .inverse;
+            return worldToLocal.MultiplyPoint3x4(position);
+        }
+
+        public static Vector3 LocalSpacePositionToWorldSpace(
+            this Transform transform,
+            Vector3 position
+        )
+        {
+            Matrix4x4 localToWorld = Matrix4x4.TRS(
+                transform.position,
+                transform.rotation,
+                Vector3.one
+            );
+            return localToWorld.MultiplyPoint3x4(position);
+        }
 
         #endregion
     }

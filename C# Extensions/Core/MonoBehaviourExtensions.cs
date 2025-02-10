@@ -107,9 +107,7 @@ namespace SABI
             where T : Component
         {
             if (behaviour.GetComponent<T>() == null)
-            {
                 behaviour.gameObject.AddComponent<T>();
-            }
         }
     }
 }

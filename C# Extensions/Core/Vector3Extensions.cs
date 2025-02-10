@@ -5,7 +5,8 @@ namespace SABI
 {
     public static class Vector3Extensions
     {
-        public static Vector3 SetValue(this Vector3 v, float value) => new Vector3(value, value, value);
+        public static Vector3 SetValue(this Vector3 v, float value) =>
+            new Vector3(value, value, value);
 
         #region With X
 
@@ -290,6 +291,11 @@ namespace SABI
             return closest;
         }
 
+        public static bool IsClose(this Vector3 a, Vector3 b, float epsilon = Vector3.kEpsilon)
+        {
+            return (a - b).sqrMagnitude <= epsilon * epsilon;
+        }
+
         public static Vector3 SetMagnitude(this Vector3 vector, float magnitude) =>
             vector.normalized * magnitude;
 
@@ -309,7 +315,9 @@ namespace SABI
         }
 
         public static float Distance(this Vector3 v, Vector3 target) => Vector3.Distance(v, target);
-        public static float Distance(this Vector3 v, Transform target) => Vector3.Distance(v, target.position);
+
+        public static float Distance(this Vector3 v, Transform target) =>
+            Vector3.Distance(v, target.position);
 
         public static float DistanceWithoutHeight(this Vector3 v, Vector3 target) =>
             Vector3.Distance(v.WithY(0), target.WithY(0));
@@ -348,10 +356,8 @@ namespace SABI
         /// <summary>
         /// Inverts a vector
         /// </summary>
-        public static Vector3 Invert(this Vector3 newValue)
-        {
-            return new Vector3(1.0f / newValue.x, 1.0f / newValue.y, 1.0f / newValue.z);
-        }
+        public static Vector3 Invert(this Vector3 newValue) =>
+            new Vector3(1.0f / newValue.x, 1.0f / newValue.y, 1.0f / newValue.z);
 
         /// <summary>
         /// Projects a vector on another
@@ -365,9 +371,20 @@ namespace SABI
         /// <summary>
         /// Rejects a vector on another
         /// </summary>
-        public static Vector3 Reject(this Vector3 vector, Vector3 rejectedVector)
-        {
-            return vector - vector.Project(rejectedVector);
-        }
+        public static Vector3 Reject(this Vector3 vector, Vector3 rejectedVector) =>
+            vector - vector.Project(rejectedVector);
+
+        #region Swap
+
+        public static Vector3 SwapXY(this Vector3 vector) =>
+            new Vector3(vector.y, vector.x, vector.z);
+
+        public static Vector3 SwapYZ(this Vector3 vector) =>
+            new Vector3(vector.x, vector.z, vector.y);
+
+        public static Vector3 SwapXZ(this Vector3 vector) =>
+            new Vector3(vector.z, vector.y, vector.x);
+
+        #endregion
     }
 }

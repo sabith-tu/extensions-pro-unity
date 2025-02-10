@@ -4,7 +4,8 @@ namespace SABI
 {
     public static class Vector4Extensions
     {
-        public static Vector4 SetValue(this Vector4 v, float value) => new Vector4(value, value, value, value);
+        public static Vector4 SetValue(this Vector4 v, float value) =>
+            new Vector4(value, value, value, value);
 
         public static Vector4 WithX(this Vector4 v, float x) => new Vector4(x, v.y, v.z, v.w);
 
@@ -73,6 +74,5 @@ namespace SABI
             v = new Vector4(v.x, v.y, v.z, target.w);
             return v;
         }
-
     }
 }

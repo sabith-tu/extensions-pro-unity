@@ -6,20 +6,12 @@ namespace SABI
     {
         public static Vector2 SetValue(this Vector2 v, float value) => new Vector2(value, value);
 
-        public static Vector2 WithX(this Vector2 vector, float x)
-        {
-            return new Vector2(x, vector.y);
-        }
+        public static Vector2 WithX(this Vector2 vector, float x) => new Vector2(x, vector.y);
 
-        public static Vector2 WithY(this Vector2 vector, float y)
-        {
-            return new Vector2(vector.x, y);
-        }
+        public static Vector2 WithY(this Vector2 vector, float y) => new Vector2(vector.x, y);
 
-        public static Vector2 SetMagnitude(this Vector2 vector, float magnitude)
-        {
-            return vector.normalized * magnitude;
-        }
+        public static Vector2 SetMagnitude(this Vector2 vector, float magnitude) =>
+            vector.normalized * magnitude;
 
         public static Vector2 WithAddX(this Vector2 v, float x) => new Vector2(v.x + x, v.y);
 

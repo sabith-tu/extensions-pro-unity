@@ -11,9 +11,8 @@ namespace SABI
             where T : struct, Enum
         {
             if (Enum.TryParse<T>(str, true, out var result))
-            {
                 return result;
-            }
+
             throw new ArgumentException($"Cannot convert '{str}' to enum {typeof(T).Name}");
         }
 
@@ -31,15 +30,9 @@ namespace SABI
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
         }
 
-        public static bool IsNullOrEmpty(this string str)
-        {
-            return string.IsNullOrEmpty(str);
-        }
+        public static bool IsNullOrEmpty(this string str) => string.IsNullOrEmpty(str);
 
-        public static bool IsNullOrWhiteSpace(this string str)
-        {
-            return string.IsNullOrWhiteSpace(str);
-        }
+        public static bool IsNullOrWhiteSpace(this string str) => string.IsNullOrWhiteSpace(str);
 
         public static string Reverse(this string str)
         {
@@ -50,10 +43,8 @@ namespace SABI
             return new string(charArray);
         }
 
-        public static string RemoveWhitespace(this string str)
-        {
-            return new string(str.Where(c => !char.IsWhiteSpace(c)).ToArray());
-        }
+        public static string RemoveWhitespace(this string str) =>
+            new string(str.Where(c => !char.IsWhiteSpace(c)).ToArray());
 
         public static string ToCamelCase(this string str)
         {

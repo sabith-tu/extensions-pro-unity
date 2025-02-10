@@ -5,7 +5,8 @@ namespace SABI
 {
     public static class Vector3IntExtensions
     {
-        public static Vector3Int SetValue(this Vector3Int v, int value) => new Vector3Int(value, value, value);
+        public static Vector3Int SetValue(this Vector3Int v, int value) =>
+            new Vector3Int(value, value, value);
 
         #region With X
 

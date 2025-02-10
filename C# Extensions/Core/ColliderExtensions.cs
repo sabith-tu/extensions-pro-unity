@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,10 +5,8 @@ namespace SABI
 {
     public static class ColliderExtensions
     {
-        public static bool IsCollidingWith(this Collider collider, Collider otherCollider)
-        {
-            return collider.bounds.Intersects(otherCollider.bounds);
-        }
+        public static bool IsCollidingWith(this Collider collider, Collider otherCollider) =>
+            collider.bounds.Intersects(otherCollider.bounds);
 
         public static Collider DisableCollisionWith(this Collider collider, Collider otherCollider)
         {

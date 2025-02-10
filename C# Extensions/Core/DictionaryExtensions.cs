@@ -11,13 +11,9 @@ namespace SABI
         )
         {
             if (dictionary.ContainsKey(key))
-            {
                 dictionary[key] = value;
-            }
             else
-            {
                 dictionary.Add(key, value);
-            }
 
             return dictionary;
         }
@@ -43,9 +39,7 @@ namespace SABI
             this Dictionary<TKey, TValue> dictionary,
             TKey key
         )
-            where TValue : UnityEngine.Object
-        {
-            return dictionary.ContainsKey(key) && dictionary[key] != null;
-        }
+            where TValue : UnityEngine.Object =>
+            dictionary.ContainsKey(key) && dictionary[key] != null;
     }
 }

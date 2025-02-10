@@ -31,10 +31,8 @@ namespace SABI
             return result;
         }
 
-        public static bool IsInRange(this int value, int minValue, int maxValue)
-        {
-            return value >= minValue && value <= maxValue;
-        }
+        public static bool IsInRange(this int value, int minValue, int maxValue) =>
+            value >= minValue && value <= maxValue;
 
         public static int ClosestInRange(this int value, int minValue, int maxValue)
         {

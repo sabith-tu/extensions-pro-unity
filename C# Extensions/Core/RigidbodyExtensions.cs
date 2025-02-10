@@ -39,10 +39,8 @@ namespace SABI
             return rigidbody;
         }
 
-        public static bool IsAlmostStopped(this Rigidbody rigidbody, float threshold = 0.1f)
-        {
-            return rigidbody.velocity.magnitude < threshold;
-        }
+        public static bool IsAlmostStopped(this Rigidbody rigidbody, float threshold = 0.1f) =>
+            rigidbody.velocity.magnitude < threshold;
 
         #region Simple Movements
 
