@@ -1,0 +1,8 @@
+using UnityEngine;
+using System;
+
+[System.AttributeUsage(AttributeTargets.All)]
+public class #ScriptName# : PropertyAttribute
+{
+    public #ScriptName# () { }
+}

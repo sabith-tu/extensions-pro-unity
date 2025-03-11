@@ -1,0 +1,29 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.UIElements;
+#endif
+
+public class #ScriptName# : MonoBehaviour
+{
+
+}
+
+#region Editor ------------------------------------------------------------------------- <Reg: Editor>
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(#ScriptName#))]
+public class #ScriptName#Editor : Editor
+{
+    public override VisualElement CreateInspectorGUI()
+    {
+        return null;
+    }
+}
+
+#endif
+
+#endregion Editor ---------------------------------------------------------------------- </Reg: Editor>

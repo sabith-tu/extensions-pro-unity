@@ -1,0 +1,23 @@
+using UnityEngine;
+
+#if UNITY_EDITOR
+
+using UnityEditor;
+
+public class #ScriptName# : EditorWindow 
+{
+    [MenuItem("Window/#ScriptName#")]
+    private static void ShowWindow()
+    {
+        var window = GetWindow <#ScriptName#>();
+        window.titleContent = new GUIContent("#ScriptName#");
+        window.Show();
+    }
+
+    void CreateGUI()
+    {
+
+    }
+}
+
+#endif
