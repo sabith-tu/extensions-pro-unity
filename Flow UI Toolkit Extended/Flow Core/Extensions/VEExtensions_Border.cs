@@ -206,8 +206,7 @@ namespace SABI.Flow
         public static T BorderColorRandom<T>(this T element)
                     where T : VisualElement => element.BorderColor(Random.ColorHSV());
 
-        public static T NoBorderColor<T>(this T element)
-                            where T : VisualElement => element.BorderColor(Color.clear);
+
 
         public static T BorderColor<T>(this T element, StyleColor? color = null)
             where T : VisualElement

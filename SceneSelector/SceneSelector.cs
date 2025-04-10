@@ -1,7 +1,6 @@
 #if UNITY_EDITOR
 
 using System.IO;
-using SABI;
 using UnityEditor;
 using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
@@ -9,32 +8,34 @@ using UnityEditor.Toolbars;
 using UnityEngine;
 using Scene = UnityEngine.SceneManagement.Scene;
 
-[Overlay(typeof(SceneView), "Scene Selector")]
-// [Icon("Assets/t.png")]
-public class SceneSelector : ToolbarOverlay
+namespace SABI
 {
-    SceneSelector() : base(MainSceneDropDownToggle.id, AllSceneDropDownToggle.id) { }
-
-    [EditorToolbarElement(id, typeof(SceneView))]
-    class MainSceneDropDownToggle : EditorToolbarDropdownToggle, IAccessContainerWindow
+    [Overlay(typeof(SceneView), "Scene Selector")]
+    // [Icon("Assets/t.png")]
+    public class SceneSelector : ToolbarOverlay
     {
-        public EditorWindow containerWindow { get; set; }
+        SceneSelector()
+            : base(MainSceneDropDownToggle.id, AllSceneDropDownToggle.id) { }
 
-        public const string id = "MainSceneDropDownToggle";
-
-        public MainSceneDropDownToggle()
+        [EditorToolbarElement(id, typeof(SceneView))]
+        class MainSceneDropDownToggle : EditorToolbarDropdownToggle, IAccessContainerWindow
         {
-            text = "Main Scenes";
-            tooltip = "Scenes in build";
-            // icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/t.png");
+            public EditorWindow containerWindow { get; set; }
 
-            dropdownClicked += () =>
+            public const string id = "MainSceneDropDownToggle";
+
+            public MainSceneDropDownToggle()
             {
-                Scene currentScene = EditorSceneManager.GetActiveScene();
-                GenericMenu menu = new GenericMenu();
+                text = "Main Scenes";
+                tooltip = "Scenes in build";
+                // icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/t.png");
 
-                EditorBuildSettings.scenes
-                    .ForEach(item =>
+                dropdownClicked += () =>
+                {
+                    Scene currentScene = EditorSceneManager.GetActiveScene();
+                    GenericMenu menu = new GenericMenu();
+
+                    EditorBuildSettings.scenes.ForEach(item =>
                     {
                         string path = item.path;
                         string name = Path.GetFileNameWithoutExtension(path);
@@ -58,56 +59,59 @@ public class SceneSelector : ToolbarOverlay
                         );
                     });
 
-                menu.ShowAsContext();
-            };
+                    menu.ShowAsContext();
+                };
+            }
         }
-    }
 
-    [EditorToolbarElement(id, typeof(SceneView))]
-    class AllSceneDropDownToggle : EditorToolbarDropdownToggle, IAccessContainerWindow
-    {
-        public EditorWindow containerWindow { get; set; }
-
-        public const string id = "SceneDropDownToggle 1";
-
-        public AllSceneDropDownToggle()
+        [EditorToolbarElement(id, typeof(SceneView))]
+        class AllSceneDropDownToggle : EditorToolbarDropdownToggle, IAccessContainerWindow
         {
-            text = "All Scenes";
-            tooltip = "All scenes in project";
-            // icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/t.png");
+            public EditorWindow containerWindow { get; set; }
 
-            dropdownClicked += () =>
+            public const string id = "SceneDropDownToggle 1";
+
+            public AllSceneDropDownToggle()
             {
-                Scene currentScene = EditorSceneManager.GetActiveScene();
-                GenericMenu menu = new GenericMenu();
-                AssetDatabase
-                    .FindAssets("t:scene", null)
-                    .ForEach(item =>
-                    {
-                        string path = AssetDatabase.GUIDToAssetPath(item);
-                        string name = Path.GetFileNameWithoutExtension(path);
-                        menu.AddItem(
-                            new GUIContent(path),
-                            string.Compare(currentScene.name, name) == 0,
-                            () =>
-                            {
-                                if (currentScene.isDirty)
+                text = "All Scenes";
+                tooltip = "All scenes in project";
+                // icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/t.png");
+
+                dropdownClicked += () =>
+                {
+                    Scene currentScene = EditorSceneManager.GetActiveScene();
+                    GenericMenu menu = new GenericMenu();
+                    AssetDatabase
+                        .FindAssets("t:scene", null)
+                        .ForEach(item =>
+                        {
+                            string path = AssetDatabase.GUIDToAssetPath(item);
+                            string name = Path.GetFileNameWithoutExtension(path);
+                            menu.AddItem(
+                                new GUIContent(path),
+                                string.Compare(currentScene.name, name) == 0,
+                                () =>
                                 {
-                                    if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+                                    if (currentScene.isDirty)
+                                    {
+                                        if (
+                                            EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()
+                                        )
+                                        {
+                                            EditorSceneManager.OpenScene(path);
+                                        }
+                                    }
+                                    else
                                     {
                                         EditorSceneManager.OpenScene(path);
                                     }
                                 }
-                                else
-                                {
-                                    EditorSceneManager.OpenScene(path);
-                                }
-                            }
-                        );
-                    });
+                            );
+                        });
 
-                menu.ShowAsContext();
-            };
+                    menu.ShowAsContext();
+                };
+            }
         }
     }
 }

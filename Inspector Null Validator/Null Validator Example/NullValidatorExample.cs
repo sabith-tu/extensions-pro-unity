@@ -5,9 +5,13 @@ namespace SABI
     public class NullValidatorExample : MonoBehaviour
     {
         [SerializeField, NullValidation]
-        private Collider collider;
+        private Collider myCollider;
 
         [SerializeField, MinimalNullValidation]
-        private Renderer renderer;
+        private Renderer myRenderer;
+
+
+
+        
     }
 }

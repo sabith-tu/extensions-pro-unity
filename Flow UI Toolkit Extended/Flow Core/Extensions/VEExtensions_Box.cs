@@ -9,7 +9,8 @@ namespace SABI.Flow
         public static T Insert<T>(this T element, params VisualElement[] children)
             where T : VisualElement
         {
-            foreach (VisualElement child in children) element.Add(child);
+            foreach (VisualElement child in children)
+                element.Add(child);
             return element;
         }
 
@@ -94,6 +95,13 @@ namespace SABI.Flow
             where T : VisualElement
         {
             FlowUtil.CopyStyle(transferer, element);
+            return element;
+        }
+
+        public static T SetParent<T>(this T element, VisualElement parent)
+            where T : VisualElement
+        {
+            parent.Add(element);
             return element;
         }
 

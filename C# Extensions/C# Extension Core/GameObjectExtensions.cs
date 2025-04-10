@@ -65,5 +65,37 @@ namespace SABI
             component = gameObject.GetComponentInParent<T>(includeInactive);
             return component != null;
         }
+
+        public static GameObject Enable(this GameObject gameObject)
+        {
+            gameObject.SetActive(true);
+            return gameObject;
+        }
+
+        public static GameObject Disable(this GameObject gameObject)
+        {
+            gameObject.SetActive(false);
+            return gameObject;
+        }
+
+        public static GameObject EnableIfDisabled(this GameObject gameObject)
+        {
+            if (!gameObject.activeInHierarchy)
+                gameObject.SetActive(true);
+            return gameObject;
+        }
+
+        public static GameObject DisableIfEnabled(this GameObject gameObject)
+        {
+            if (gameObject.activeInHierarchy)
+                gameObject.SetActive(false);
+            return gameObject;
+        }
+
+        public static GameObject Toggle(this GameObject gameObject)
+        {
+            gameObject.SetActive(!gameObject.activeInHierarchy);
+            return gameObject;
+        }
     }
 }

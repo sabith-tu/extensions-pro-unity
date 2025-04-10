@@ -1,11 +1,7 @@
 fileFormatVersion: 2
-guid: 9ea574c8ef79d474881735cb64dc322a
-MonoImporter:
+guid: a09b8a235b99e2d48ac3079eec5ad87b
+TextScriptImporter:
   externalObjects: {}
-  serializedVersion: 2
-  defaultReferences: []
-  executionOrder: 0
-  icon: {instanceID: 0}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
@@ -14,5 +10,5 @@ AssetOrigin:
   productId: 294035
   packageName: Extensions Pro
   packageVersion: 2.3
-  assetPath: Assets/Unity Downloaded Assets/SABI/ScriptTemplets/ScriptTemplet.cs
+  assetPath: Assets/Unity Downloaded Assets/SABI/ScriptTemplets/Templets/Templet_PropertyDrawer.txt
   uploadId: 742353

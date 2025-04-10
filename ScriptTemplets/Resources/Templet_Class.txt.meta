@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7eb6c709b8ad50d4da5d793e3d0ab764
+guid: 32ec064b5aad5e54e924ff0a0fe72e8a
 DefaultImporter:
   externalObjects: {}
   userData: 
@@ -9,6 +9,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 294035
   packageName: Extensions Pro
-  packageVersion: 2.1
-  assetPath: Assets/SABI/Flow UI Toolkit Extended/FLOW Doccumentation.pdf
-  uploadId: 739780
+  packageVersion: 2.3
+  assetPath: Assets/Unity Downloaded Assets/SABI/ScriptTemplets/Templets/Templet_Class.txt
+  uploadId: 742353

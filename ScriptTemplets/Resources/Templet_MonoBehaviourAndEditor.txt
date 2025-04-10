@@ -20,7 +20,10 @@ public class #ScriptName#Editor : Editor
 {
     public override VisualElement CreateInspectorGUI()
     {
-        return null;
+        var root = new VisualElement();
+        InspectorElement.FillDefaultInspector(root, serializedObject, this);
+
+        return root;
     }
 }
 

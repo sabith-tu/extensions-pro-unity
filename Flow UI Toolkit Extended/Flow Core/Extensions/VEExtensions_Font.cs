@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+
 namespace SABI.Flow
 {
     public static class VEExtensions_Font
     {
-
         #region Default Values
 
         const float DefaultFontSize = 20;
@@ -141,6 +141,19 @@ namespace SABI.Flow
             return element;
         }
 
+        public static T WhiteSpace<T>(this T element, UnityEngine.UIElements.WhiteSpace value)
+            where T : VisualElement
+        {
+            element.style.whiteSpace = value;
+            return element;
+        }
+
+        public static T TextWrap<T>(this T element)
+            where T : VisualElement
+        {
+            return element.WhiteSpace(UnityEngine.UIElements.WhiteSpace.Normal);
+        }
+
         #endregion
 
         #region Headings
@@ -164,6 +177,5 @@ namespace SABI.Flow
             where T : VisualElement => element.Bold().FontSize(10.72f).MarginTopBottom(7);
 
         #endregion
-
     }
 }
