@@ -1,0 +1,34 @@
+using UnityEngine;
+using System;
+using UnityEngine.UIElements;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+[System.AttributeUsage(AttributeTargets.All)]
+public class #ScriptName# : PropertyAttribute
+{
+    public #ScriptName# () { }
+}
+
+
+
+#region Editor ------------------------------------------------------------------------- <Reg: Editor>
+
+#if UNITY_EDITOR
+
+[CustomPropertyDrawer(typeof(#ScriptName#))]
+public class #DrawerName# : PropertyDrawer
+{
+    public override VisualElement CreatePropertyGUI(SerializedProperty property)
+    {
+        VisualElement root = new VisualElement();
+
+        return root;
+    }
+}
+
+#endif
+
+#endregion Editor ---------------------------------------------------------------------- </Reg: Editor>

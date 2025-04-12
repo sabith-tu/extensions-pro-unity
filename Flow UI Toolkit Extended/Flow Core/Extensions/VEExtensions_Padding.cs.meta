@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a16c8d097e2bf1640acc453fea95e730
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 294035
+  packageName: Extensions Pro
+  packageVersion: 2.1
+  assetPath: Assets/SABI/Flow UI Toolkit Extended/Flow Core/Extensions/VEExtensions_Padding.cs
+  uploadId: 739780

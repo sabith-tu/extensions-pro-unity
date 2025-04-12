@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2a2adb307a98ee044885125672427da7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 294034
+  packageName: Ultimate Inspector Button
+  packageVersion: 2.1
+  assetPath: Assets/SABI/Inspector Button/Button Core/Editor/ButtonInspector.cs
+  uploadId: 732823

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 75648e00a7f8e0f4fbf35d1a46017148
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 294035
+  packageName: Extensions Pro
+  packageVersion: 2.1
+  assetPath: Assets/SABI/Flow UI Toolkit Extended/Flow Core/Extensions/VEExtensions_Align.cs
+  uploadId: 739780
