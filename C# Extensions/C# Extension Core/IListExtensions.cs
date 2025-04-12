@@ -29,7 +29,7 @@ namespace SABI
         /// <summary>
         /// Returns a specified number of random items from the list without duplicates
         /// </summary>
-        public static List<T> GetUniqeRandomItems<T>(this IList<T> list, int count)
+        public static List<T> GetUniqueRandomItems<T>(this IList<T> list, int count)
         {
             if (count > list.Count)
                 throw new System.ArgumentException("Requested count is larger than list size");
