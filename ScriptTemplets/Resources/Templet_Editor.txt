@@ -1,0 +1,17 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.UIElements;
+
+[CustomEditor(typeof(#TargetName#))]
+public class #ScriptName# : Editor
+{
+    public override VisualElement CreateInspectorGUI()
+    {
+        throw new System.NotImplementedException();
+    }
+}
+
+#endif

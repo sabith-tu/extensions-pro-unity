@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 18fcf7aa185fc204c83d5f8d86f98764
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 294035
+  packageName: Extensions Pro
+  packageVersion: 2.1
+  assetPath: Assets/SABI/Flow UI Toolkit Extended/Flow Core/Components/Column.cs
+  uploadId: 739780
