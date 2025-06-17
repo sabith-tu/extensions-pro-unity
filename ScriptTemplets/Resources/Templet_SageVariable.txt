@@ -1,0 +1,29 @@
+using SABI.SOA;
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+[CreateAssetMenu(menuName = "SAGE/Custom/Sage#ScriptName#SO")]
+public class Sage#ScriptName#SO : BaseSageVariable<#ScriptName#>
+{
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        CustomName = "#ScriptName# Value SO";
+    }
+}
+
+
+#region Editor
+
+#if UNITY_EDITOR
+
+namespace SABI.SOA
+{
+    [CustomEditor(typeof(Sage#ScriptName#SO), true)]
+    public class Sage#ScriptName#Editor : BaseSageVariableEditor { }
+}
+#endif
+
+#endregion

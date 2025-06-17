@@ -29,7 +29,7 @@ namespace SABI
         /// <summary>
         /// Returns a specified number of random items from the list without duplicates
         /// </summary>
-        public static List<T> GetUniqueRandomItems<T>(this IList<T> list, int count)
+        public static List<T> GetUniqeRandomItems<T>(this IList<T> list, int count)
         {
             if (count > list.Count)
                 throw new System.ArgumentException("Requested count is larger than list size");
@@ -259,5 +259,56 @@ namespace SABI
                 list.RemoveAt(i);
             return list;
         }
+
+        /// <summary>
+        /// Add multiple items as params
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public static IList<T> AddMultiple<T>(this IList<T> list, params T[] items)
+        {
+            items.ForEach(item => list.Add(item));
+            return list;
+        }
+
+        /// <summary>
+        /// Remove multiple items as params
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public static IList<T> RemoveMultiple<T>(this IList<T> list, params T[] items)
+        {
+            items.ForEach(item => list.Remove(item));
+            return list;
+        }
+
+        /// <summary>
+        /// Clear the list and Add multiple items as params
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        // public static IList<T> SetMultiple<T>(this IList<T> list, params T[] items)
+        // {
+        //     if (list is T[] array)
+        //     {
+        //         list = new T[items.Length];
+
+        //         for (int i = 0; i < array.Length; i++)
+        //             array[i] = items[i];
+        //     }
+        //     else
+        //     {
+        //         if (list == null)
+        //             list = new List<T>();
+        //         else
+        //             list.Clear();
+        //         items.ForEach(item => list.Add(item));
+        //     }
+        //     return list;
+        // }
     }
 }

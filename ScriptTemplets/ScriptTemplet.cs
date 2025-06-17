@@ -4,8 +4,6 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-//TODO: Interface
-
 namespace SABI
 {
     public static class ScriptTemplet
@@ -35,7 +33,6 @@ namespace SABI
                 "NewMonoBehaviour.cs",
                 "cs"
             );
-            // string pathToTemplet = Resources.Load<TextAsset>("Templet_MonoBehaviour").text;
             CreateScript(pathToNewFile, "Templet_MonoBehaviour");
         }
 
@@ -48,7 +45,6 @@ namespace SABI
                 "NewAttribute.cs",
                 "cs"
             );
-            // string pathToTemplet = Resources.Load<TextAsset>("Templet_Attribute").text;
             CreateScript(pathToNewFile, "Templet_Attribute");
         }
 
@@ -61,7 +57,6 @@ namespace SABI
                 "NewPropertyDrawer.cs",
                 "cs"
             );
-            // string pathToTemplet = Resources.Load<TextAsset>("Templet_PropertyDrawer").text;
             CreateScript(pathToNewFile, "Templet_PropertyDrawer", Types.PropertyDrawer);
         }
 
@@ -74,7 +69,6 @@ namespace SABI
                 "NewMonoBehaviourAndEditor.cs",
                 "cs"
             );
-            // string pathToTemplet = Resources.Load<TextAsset>("Templet_MonoBehaviourAndEditor").text;
             CreateScript(pathToNewFile, "Templet_MonoBehaviourAndEditor");
         }
 
@@ -87,7 +81,6 @@ namespace SABI
                 "NewEditor.cs",
                 "cs"
             );
-            // string pathToTemplet = Resources.Load<TextAsset>("Templet_Editor").text;
             CreateScript(pathToNewFile, "Templet_Editor", Types.Editor);
         }
 
@@ -100,7 +93,6 @@ namespace SABI
                 "NewEditorWindow.cs",
                 "cs"
             );
-            // string pathToTemplet = Resources.Load<TextAsset>("Templet_EditorWindow").text;
             CreateScript(pathToNewFile, "Templet_EditorWindow");
         }
 
@@ -113,7 +105,6 @@ namespace SABI
                 "NewPropertyAttribute.cs",
                 "cs"
             );
-            // string pathToTemplet = Resources.Load<TextAsset>("Templet_PropertyAttribute").text;
             CreateScript(pathToNewFile, "Templet_PropertyAttribute");
         }
 
@@ -126,7 +117,6 @@ namespace SABI
                 "NewPropertyAttributeAndDrawer.cs",
                 "cs"
             );
-            // string pathToTemplet = Resources.Load<TextAsset>("Templet_PropertyAttributeAndDrawer").text;
             CreateScript(
                 pathToNewFile,
                 "Templet_PropertyAttributeAndDrawer",
@@ -143,8 +133,19 @@ namespace SABI
                 "NewScriptableObjectSO.cs",
                 "cs"
             );
-            // string pathToTemplet = Resources.Load<TextAsset>("Templet_ScriptableObject").text;
             CreateScript(pathToNewFile, "Templet_ScriptableObject");
+        }
+
+        [MenuItem("Assets/ScriptsTemplets/ScriptableObjectAndEditor")]
+        static void CreateScript_ScriptableObjectAndEditor()
+        {
+            string pathToNewFile = EditorUtility.SaveFilePanel(
+                "Create ScriptableObject And Editor",
+                GetCurrentPath(),
+                "NewScriptableObjectAndEditorSO.cs",
+                "cs"
+            );
+            CreateScript(pathToNewFile, "Templet_ScriptableObjectAndEditor");
         }
 
         [MenuItem("Assets/ScriptsTemplets/Class")]
@@ -156,8 +157,31 @@ namespace SABI
                 "NewClass.cs",
                 "cs"
             );
-            // string pathToTemplet = Resources.Load<TextAsset>("Templet_Class").text;
             CreateScript(pathToNewFile, "Templet_Class");
+        }
+
+        [MenuItem("Assets/ScriptsTemplets/Interface")]
+        static void CreateScript_Interface()
+        {
+            string pathToNewFile = EditorUtility.SaveFilePanel(
+                "Create Interface",
+                GetCurrentPath(),
+                "NewInterface.cs",
+                "cs"
+            );
+            CreateScript(pathToNewFile, "Templet_Interface");
+        }
+
+        [MenuItem("Assets/ScriptsTemplets/Sage/SageVariable")]
+        static void CreateScript_SageVariable()
+        {
+            string pathToNewFile = EditorUtility.SaveFilePanel(
+                "Create Sage Variable",
+                GetCurrentPath(),
+                "NewSageVariable.cs",
+                "cs"
+            );
+            CreateScript(pathToNewFile, "Templet_SageVariable");
         }
         #endregion
 

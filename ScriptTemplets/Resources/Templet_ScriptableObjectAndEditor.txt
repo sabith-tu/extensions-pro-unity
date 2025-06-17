@@ -1,0 +1,33 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.UIElements;
+#endif
+
+[CreateAssetMenu(menuName = "SO/#ScriptName#")]
+public class #ScriptName# : ScriptableObject
+{
+
+}
+
+#region Editor ------------------------------------------------------------------------- <Reg: Editor>
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(#ScriptName#))]
+public class #ScriptName#Editor : Editor
+{
+    public override VisualElement CreateInspectorGUI()
+    {
+        var root = new VisualElement();
+        InspectorElement.FillDefaultInspector(root, serializedObject, this);
+
+        return root;
+    }
+}
+
+#endif
+
+#endregion Editor ---------------------------------------------------------------------- </Reg: Editor>

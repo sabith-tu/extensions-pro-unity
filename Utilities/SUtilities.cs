@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
+
 namespace SABI
 {
     public static class SUtilities
@@ -55,7 +56,9 @@ namespace SABI
                 newObject.transform.localScale = Vector3.one * (scale ?? 0.2f);
                 newObject.GetComponent<Collider>().enabled = false;
                 if (autoDestroyTime != null)
-                    newObject.AddComponent<AutoDestroyableInGivenTime>().SetTime(autoDestroyTime.Value);
+                    newObject
+                        .AddComponent<AutoDestroyableInGivenTime>()
+                        .SetTime(autoDestroyTime.Value);
                 newObject.GetComponent<MeshRenderer>().material.color =
                     color ?? new Color(0.8f, 0.1f, 0.1f, 0.3f);
                 MeshRenderer meshRenderer = newObject.GetComponent<MeshRenderer>();
@@ -79,7 +82,7 @@ namespace SABI
             return newObject;
         }
 
-        public static void SLog(
+        public static void Log(
             string message,
             Object context = null,
             string color = "yellow",
@@ -153,21 +156,21 @@ namespace SABI
             return lineRenderer;
         }
 
-        public static void SLog(
+        public static void Log(
             string message,
             string tag,
             Object context = null,
             string color = "yellow"
         )
         {
-            SLog(message, context, color, (tag != null ? new string[] { tag } : null));
+            Log(message, context, color, (tag != null ? new string[] { tag } : null));
         }
 
         public static void LogGameFlow(string message, Object context = null)
         {
             try
             {
-                SLog(message, context, color: "green", tags: new string[] { "IMP", "GameFlow" });
+                Log(message, context, color: "green", tags: new string[] { "IMP", "GameFlow" });
             }
             catch (System.Exception e)
             {
@@ -175,6 +178,8 @@ namespace SABI
             }
         }
 
-        public static bool CanShow() => true; //TODO: ChangeBackTo: GameManager.Instance.CanUseDebugingFunctions;
+        public static T GetRandom<T>(params T[] items) => items.GetRandomItem();
+
+        public static bool CanShow() => true;
     }
 }

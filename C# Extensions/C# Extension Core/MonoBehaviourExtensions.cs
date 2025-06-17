@@ -22,6 +22,17 @@ namespace SABI
             yield return new WaitForSeconds(delay);
             callback?.Invoke();
         }
+
+        public static MonoBehaviour DelayedExecution(
+            this MonoBehaviour monoBehaviour,
+            float delay,
+            Action callback,
+            out Coroutine coroutine
+        )
+        {
+            coroutine = monoBehaviour.StartCoroutine(Execute(delay, callback));
+            return monoBehaviour;
+        }
         #endregion
 
         #region Delayed Execution Frame
