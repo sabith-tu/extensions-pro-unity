@@ -25,7 +25,7 @@ namespace SABI
             float maxForce
         )
         {
-            Vector3 velocityDiff = targetVelocity - rigidbody.velocity;
+            Vector3 velocityDiff = targetVelocity - rigidbody.linearVelocity;
             Vector3 force = velocityDiff * rigidbody.mass / Time.fixedDeltaTime; // F = m*a
             force = Vector3.ClampMagnitude(force, maxForce);
             rigidbody.AddForce(force, ForceMode.Force);
@@ -34,13 +34,13 @@ namespace SABI
 
         public static Rigidbody Stop(this Rigidbody rigidbody)
         {
-            rigidbody.velocity = Vector3.zero;
+            rigidbody.linearVelocity = Vector3.zero;
             rigidbody.angularVelocity = Vector3.zero;
             return rigidbody;
         }
 
         public static bool IsAlmostStopped(this Rigidbody rigidbody, float threshold = 0.1f) =>
-            rigidbody.velocity.magnitude < threshold;
+            rigidbody.linearVelocity.magnitude < threshold;
 
         #region Simple Movements
 

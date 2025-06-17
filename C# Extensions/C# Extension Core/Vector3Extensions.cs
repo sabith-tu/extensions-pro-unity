@@ -386,5 +386,41 @@ namespace SABI
             new Vector3(vector.z, vector.y, vector.x);
 
         #endregion
+        #region Debugging
+        public static GameObject SpawnCubeAtLocation(
+            this Vector3 vector,
+            string nameArg = "Unnamed",
+            Color? color = null,
+            float? scale = null
+        )
+        {
+            GameObject newObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            newObject.name = nameArg;
+
+            newObject.transform.localScale = Vector3.one * (scale ?? 0.1f);
+            newObject.GetComponent<Collider>().enabled = false;
+            newObject.GetComponent<MeshRenderer>().material.color =
+                color ?? new Color(0.8f, 0.1f, 0.1f, 0.3f);
+            newObject.transform.position = vector;
+            return newObject;
+        }
+
+        public static GameObject CreateSphereAtLocation(
+            this Vector3 vector,
+            string nameArg = "Unnamed",
+            Color? color = null,
+            float? scale = null
+        )
+        {
+            GameObject newObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            newObject.name = nameArg;
+            newObject.transform.localScale = Vector3.one * (scale ?? 0.1f);
+            newObject.GetComponent<Collider>().enabled = false;
+            newObject.GetComponent<MeshRenderer>().material.color =
+                color ?? new Color(0.8f, 0.1f, 0.1f, 0.3f);
+            newObject.transform.position = vector;
+            return newObject;
+        }
+        #endregion
     }
 }

@@ -18,7 +18,7 @@ namespace SABI
             : base(MainSceneDropDownToggle.id, AllSceneDropDownToggle.id) { }
 
         [EditorToolbarElement(id, typeof(SceneView))]
-        class MainSceneDropDownToggle : EditorToolbarDropdownToggle, IAccessContainerWindow
+        class MainSceneDropDownToggle : EditorToolbarButton, IAccessContainerWindow
         {
             public EditorWindow containerWindow { get; set; }
 
@@ -26,11 +26,11 @@ namespace SABI
 
             public MainSceneDropDownToggle()
             {
-                text = "Main Scenes";
-                tooltip = "Scenes in build";
+                text = "Scenes in build";
+                // tooltip = "All the scenes part of the ";
                 // icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/t.png");
 
-                dropdownClicked += () =>
+                clicked += () =>
                 {
                     Scene currentScene = EditorSceneManager.GetActiveScene();
                     GenericMenu menu = new GenericMenu();
@@ -65,7 +65,7 @@ namespace SABI
         }
 
         [EditorToolbarElement(id, typeof(SceneView))]
-        class AllSceneDropDownToggle : EditorToolbarDropdownToggle, IAccessContainerWindow
+        class AllSceneDropDownToggle : EditorToolbarButton, IAccessContainerWindow
         {
             public EditorWindow containerWindow { get; set; }
 
@@ -77,7 +77,7 @@ namespace SABI
                 tooltip = "All scenes in project";
                 // icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/t.png");
 
-                dropdownClicked += () =>
+                clicked += () =>
                 {
                     Scene currentScene = EditorSceneManager.GetActiveScene();
                     GenericMenu menu = new GenericMenu();

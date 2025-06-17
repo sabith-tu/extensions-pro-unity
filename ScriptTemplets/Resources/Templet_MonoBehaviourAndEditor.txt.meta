@@ -9,6 +9,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 294035
   packageName: Extensions Pro
-  packageVersion: 2.3
-  assetPath: Assets/Unity Downloaded Assets/SABI/ScriptTemplets/Templets/Templet_MonoBehaviourAndEditor.txt
-  uploadId: 742353
+  packageVersion: 2.7
+  assetPath: Assets/SABI/ScriptTemplets/Resources/Templet_MonoBehaviourAndEditor.txt
+  uploadId: 752488

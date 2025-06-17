@@ -8,6 +8,7 @@ namespace SABI
 {
     public static class TransformExtensions
     {
+        #region Reset
         public static Transform ResetValues(this Transform transform)
         {
             transform.localPosition = Vector3.zero;
@@ -15,6 +16,26 @@ namespace SABI
             transform.localScale = Vector3.one;
             return transform;
         }
+
+        public static Transform ResetPosition(this Transform transform)
+        {
+            transform.localPosition = Vector3.zero;
+            return transform;
+        }
+
+        public static Transform ResetRotation(this Transform transform)
+        {
+            transform.localRotation = Quaternion.identity;
+            return transform;
+        }
+
+        public static Transform ResetPositionAndRotation(this Transform transform)
+        {
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            return transform;
+        }
+        #endregion
 
         #region LocalEulerAngle
         public static Transform SetLocalEulerAngles(
@@ -991,6 +1012,82 @@ namespace SABI
 
         #endregion
 
+        #region Rotate
+        public static Transform RotateX(this Transform transform, float value)
+        {
+            transform.Rotate(value, 0, 0);
+            return transform;
+        }
+
+        public static Transform RotateY(this Transform transform, float value)
+        {
+            transform.Rotate(0, value, 0);
+            return transform;
+        }
+
+        public static Transform RotateZ(this Transform transform, float value)
+        {
+            transform.Rotate(0, 0, value);
+            return transform;
+        }
+        #endregion
+
+        #region Move
+        public static Transform MoveX(this Transform transform, float distance)
+        {
+            transform.Translate(transform.right * distance, Space.Self);
+            return transform;
+        }
+
+        public static Transform MoveY(this Transform transform, float distance)
+        {
+            transform.Translate(transform.up * distance, Space.Self);
+            return transform;
+        }
+
+        public static Transform MoveZ(this Transform transform, float distance)
+        {
+            transform.Translate(transform.forward * distance, Space.Self);
+            return transform;
+        }
+
+        public static Transform MoveForward(this Transform transform, float distance)
+        {
+            transform.Translate(transform.forward * distance, Space.Self);
+            return transform;
+        }
+
+        public static Transform MoveBackward(this Transform transform, float distance)
+        {
+            transform.Translate(-transform.forward * distance, Space.Self);
+            return transform;
+        }
+
+        public static Transform MoveRight(this Transform transform, float distance)
+        {
+            transform.Translate(transform.right * distance, Space.Self);
+            return transform;
+        }
+
+        public static Transform MoveLeft(this Transform transform, float distance)
+        {
+            transform.Translate(-transform.right * distance, Space.Self);
+            return transform;
+        }
+
+        public static Transform MoveUp(this Transform transform, float distance)
+        {
+            transform.Translate(transform.up * distance, Space.Self);
+            return transform;
+        }
+
+        public static Transform MoveDown(this Transform transform, float distance)
+        {
+            transform.Translate(-transform.up * distance, Space.Self);
+            return transform;
+        }
+        #endregion
+
         #region Children
 
         public static Transform DestroyChildren(this Transform transform)
@@ -1352,6 +1449,77 @@ namespace SABI
             return localToWorld.MultiplyPoint3x4(position);
         }
 
+        #endregion
+
+        #region GameObject
+        public static Transform Enable(this Transform transform)
+        {
+            transform.gameObject.SetActive(true);
+            return transform;
+        }
+
+        public static Transform Disable(this Transform transform)
+        {
+            transform.gameObject.SetActive(false);
+            return transform;
+        }
+
+        public static Transform EnableIfDisabled(this Transform transform)
+        {
+            if (!transform.gameObject.activeInHierarchy)
+                transform.gameObject.SetActive(true);
+            return transform;
+        }
+
+        public static Transform DisableIfEnabled(this Transform transform)
+        {
+            if (transform.gameObject.activeInHierarchy)
+                transform.gameObject.SetActive(false);
+            return transform;
+        }
+
+        public static Transform Toggle(this Transform transform)
+        {
+            transform.gameObject.SetActive(!transform.gameObject.activeInHierarchy);
+            return transform;
+        }
+        #endregion
+
+        #region Debugging
+        public static GameObject SpawnCubeAtLocation(
+            this Transform transform,
+            string nameArg = "Unnamed",
+            Color? color = null,
+            float? scale = null
+        )
+        {
+            GameObject newObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            newObject.name = nameArg;
+
+            newObject.transform.localScale = Vector3.one * (scale ?? 0.1f);
+            newObject.GetComponent<Collider>().enabled = false;
+            newObject.GetComponent<MeshRenderer>().material.color =
+                color ?? new Color(0.8f, 0.1f, 0.1f, 0.3f);
+            newObject.transform.position = transform.position;
+            return newObject;
+        }
+
+        public static GameObject CreateSphereAtLocation(
+            this Transform transform,
+            string nameArg = "Unnamed",
+            Color? color = null,
+            float? scale = null
+        )
+        {
+            GameObject newObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            newObject.name = nameArg;
+            newObject.transform.localScale = Vector3.one * (scale ?? 0.1f);
+            newObject.GetComponent<Collider>().enabled = false;
+            newObject.GetComponent<MeshRenderer>().material.color =
+                color ?? new Color(0.8f, 0.1f, 0.1f, 0.3f);
+            newObject.transform.position = transform.position;
+            return newObject;
+        }
         #endregion
     }
 }
